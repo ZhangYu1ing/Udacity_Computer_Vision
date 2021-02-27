@@ -24,42 +24,28 @@ class Net(nn.Module):
        
         
         self.conv1 = nn.Conv2d(1, 32, 5)
-#         self.pool1 = nn.MaxPool2d(2,2)
-#         self.drop1 = nn.Dropout(p = 0.1)
 
         self.pool = nn.MaxPool2d(2,2)
         
         
         self.conv2 = nn.Conv2d(32, 64, 3)
-#         self.pool2 = nn.MaxPool2d(2,2)
-#         self.drop2 = nn.Dropout(p = 0.2)
-        
-        
         self.conv3 = nn.Conv2d(64, 128, 3)
-#         self.pool3 = nn.MaxPool2d(2,2)
-#         self.drop3 = nn.Dropout(p = 0.3)
-        
+
         self.conv4 = nn.Conv2d(128, 256, 3)
-#         self.pool4 = nn.MaxPool2d(2,2)
-#         self.drop4 = nn.Dropout(p = 0.4)
-        
-        self.conv5 = nn.Conv2d(256, 512, 1)
-#         self.pool5 = nn.MaxPool2d(2,2)
-#         self.drop5 = nn.Dropout(p = 0.5)
-        
-#         self.fc6 = nn.Linear(512*5*5, 2560)
-#         self.drop6 = nn.Dropout(p = 0.4)
-        
-#         self.fc7 = nn.Linear(2560, 1280)
-#         self.drop7 = nn.Dropout(p = 0.4)
-#         self.fc8 = nn.Linear(1280, 136)
+
+#         self.conv5 = nn.Conv2d(256, 512, 1)
+        self.drop1 = nn.Dropout(p=0.1)
+        self.drop2 = nn.Dropout(p=0.2)
+        self.drop3 = nn.Dropout(p=0.3)
 
         
-        self.fc1 = nn.Linear(512*6*6, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.fc3 = nn.Linear(512, 136)
+        self.fc1 = nn.Linear(1024*6*6, 1000)
+        self.fc2 = nn.Linear(1000, 1000)
+        self.fc3 = nn.Linear(1000, 136)
         
-        self.drop = nn.Dropout(p=0.3)
+        self.drop4 = nn.Dropout(p=0.4)
+        self.drop5 = nn.Dropout(p=0.5)
+        self.drop6 = nn.Dropout(p=0.6)
         
         
         ## Note that among the layers to add, consider including:
@@ -73,36 +59,24 @@ class Net(nn.Module):
         ## x = self.pool(F.relu(self.conv1(x)))
         
         x = self.pool(F.relu(self.conv1(x)))
-#         x = self.drop1(x)
+        x = self.drop1(x)
+        
         x = self.pool(F.relu(self.conv2(x)))
-#         x = self.drop2(x)
+        x = self.drop2(x)
         
         x = self.pool(F.relu(self.conv3(x)))
-#         x = self.drop3(x)
+        x = self.drop3(x)
         
         x = self.pool(F.relu(self.conv4(x)))
-#         x = self.drop4(x)
-        
-        x = self.pool(F.relu(self.conv5(x)))
-#         x = self.drop5(x)
-        
+        x = self.drop4(x)
+
+#         x = self.pool(F.relu(self.conv5(x)))
+
         x = x.view(x.size(0), -1)
-        
-        x = F.relu(self.fc1(x))
-        x = self.drop(x)
-        x = F.relu(self.fc2(x))
-        x = self.drop(x)
+    
+        x = self.drop5(F.relu(self.fc1(x)))
+        x = self.drop6(F.relu(self.fc2(x)))
         x = self.fc3(x)
-        
-#         x = F.relu(self.fc6(x))
-#         x = self.drop6(x)
-        
-#         x = F.relu(self.fc7(x))
-#         x = self.drop7(x)
-        
-#         x = self.fc8(x)
-       
-        
         
         
         # a modified x, having gone through all the layers of your model, should be returned
